@@ -115,6 +115,7 @@ exports.extensionBundles = [
   {name: 'amp-dailymotion', version: '0.1', type: TYPES.MEDIA},
   {name: 'amp-date-countdown', version: '0.1', type: TYPES.MISC},
   {name: 'amp-date-display', version: '0.1', type: TYPES.MISC},
+  {name: 'amp-digidip', version: '0.1', type: TYPES.MISC},
   {name: 'amp-google-document-embed', version: '0.1', type: TYPES.MISC},
   {name: 'amp-dynamic-css-classes', version: '0.1', type: TYPES.MISC},
   {name: 'amp-embedly-card', version: '0.1', type: TYPES.MISC},
