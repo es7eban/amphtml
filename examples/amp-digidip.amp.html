@@ -15,6 +15,32 @@
   <script async src="https://cdn.ampproject.org/v0.js"></script>
 </head>
 <body>
-  <amp-digidip layout="responsive" width="150" height="80"></amp-digidip>
+<div id="scope">
+  <a href="http://jn.pt">anchor 1</a>
+  <a rel="noreferrer pass" href="http://jn.pt">anchor 2</a>
+  <div id="notrack">
+    <a href="http://jn.pt">anchor 3</a>
+  </div>
+  <div class="scope">
+    <a href="http://jn.pt">anchor 3</a>
+  </div>
+</div>
+<amp-digidip
+        layout="responsive"
+        width="150"
+        height="80"
+        url-visit="http://stylebudget.digidipclick.local/visit?url="
+        url-worddip-words="//stylebudget.digidipclick.local/words"
+        use-worddip="0"
+        new-tab="1"
+        encoded-xhr-credentials="bW9iaXBhbnRzOm1vYmlwYW50cw=="
+        hosts-ignore="facebook.com|youtube.com|baidu.com|wikipedia.org|twitter.com|qq.com|linkedin.com|taobao.com|live.com|hao123.com|sina.com.cn|blogspot.com|weibo.com|yandex.ru|sohu.com|vk.com|pinterest.com|wordpress.com|360.cn|instagram.com|paypal.com|msn.com|soso.com|ask.com|tumblr.com|xvideos.com|mail.ru|163.com|imdb.com|stackoverflow.com|imgur.com|reddit.com|blogger.com|cnn.com|lemonde.fr|lefigaro.fr|tukif.com|allocine.fr|parisexe.com|t.co|lequipe.fr|pagesjaunes.fr|dailymotion.com|store.steampowered.com|googleadservices.com|doubleclick.net|youtu.be|rstyle.me|mondemul.net|cdn.m6web.fr|jheberg.net|userscloud.com"
+        reading-words-exclude="the|you|was|or|it|and|to|of|in|for|on|with|at|by|from|up|about|into|over|after|beneath|under|above|der|die|das|von|zu"
+        element-clickhandler=""
+        element-clickhandler-attribute=""
+        element-ignore-attribute="rel"
+        element-ignore-pattern="pass"
+        element-ignore-consider-parents="0">
+</amp-digidip>
 </body>
 </html>
