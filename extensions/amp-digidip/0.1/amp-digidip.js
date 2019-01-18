@@ -24,9 +24,6 @@ export class AmpDigidip extends AMP.BaseElement {
   constructor(element) {
     super(element);
 
-    /** @private {?string} */
-    this.href_ = '';
-
     /** @private {?../../../src/service/xhr-impl.Xhr} */
     this.xhr_ = null;
 
@@ -42,8 +39,12 @@ export class AmpDigidip extends AMP.BaseElement {
     /* @private {?./link-shifter} */
     this.shifter_ = null;
 
+    /** @private {?string} */
+    this.merchantUrl_ = '';
+
     /** @private {?Object} */
     this.digidipOpts_ = {};
+
   }
 
   /** @override */
@@ -54,9 +55,8 @@ export class AmpDigidip extends AMP.BaseElement {
     this.docInfo_ = Services.documentInfoForDoc(this.ampDoc_);
 
     return this.ampDoc_.whenBodyAvailable()
-        .then(() => this.viewer_.getReferrerUrl())
-        .then(referrerUrl => {
-          this.digidipOpts_ = getDigidipOptions(this.element, referrerUrl);
+        .then(() => {
+          this.digidipOpts_ = getDigidipOptions(this.element);
           this.letsRockIt_();
         });
   }
@@ -65,8 +65,43 @@ export class AmpDigidip extends AMP.BaseElement {
    * @private
    */
   letsRockIt_() {
-    this.href_ = 'http://amazon.de/category?pid=777';
-    this.shifter_ = new LinkShifter(this.digidipOpts_, this.href_);
+    // const rootNode = this.ampDoc_.getRootNode();
+
+    /*if (this.digidipOpts_.elementClickhandler !== ''
+        && this.digidipOpts_.elementClickhandlerAttribute !== '') {
+      let tmpRootNodes = false;
+      let scope = '';
+
+      switch (this.digidipOpts_.elementClickhandlerAttribute) {
+        case 'id':
+          scope = '#';
+          tmpRootNodes = rootNode.querySelector;
+      }
+    }*/
+
+    const doc = this.ampDoc_.getRootNode();
+
+    console.log(doc);
+
+    const list = doc.querySelectorAll('a');
+
+    this.merchantUrl_ = 'http://amazon.de/category?pid=777';
+    this.shifter_ = new LinkShifter(
+        this.digidipOpts_,
+        this.merchantUrl_,
+        this.viewer_
+    );
+
+    list.forEach(anchor => {
+      anchor.addEventListener('click', event => {
+        this.shifter_.clickHandler(event);
+      });
+
+      anchor.addEventListener('contextmenu', event => {
+        this.shifter_.clickHandler(event);
+      });
+    });
+
   }
 
   /** @override */

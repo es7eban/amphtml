@@ -18,13 +18,46 @@ export class LinkShifter {
 
   /**
    * @param {!Object} digidipOpts
-   * @param {string} href
+   * @param {string} merchantUrl
+   * @param {!../../../src/service/viewer-impl.Viewer} viewer
    */
-  constructor(digidipOpts, href) {
-    this.digidipOpts = digidipOpts;
-    this.href = href;
+  constructor(digidipOpts, merchantUrl, viewer) {
+    /** @private {?Object} */
+    this.digidipOpts_ = digidipOpts;
+
+    /** @private {?string} */
+    this.merchantUrl_ = merchantUrl;
+
+    /** @private {!../../../src/service/viewer-impl.Viewer} */
+    this.viewer_ = viewer;
   }
 
-  getDigidipUrl() {
+  /**
+   * @param {!Event} event
+   */
+  clickHandler(event) {
+    let element = event.srcElement;
+    let trimmedDomain = this.viewer_.win.document.domain
+        .replace(/(www\.)?(.*)/, '$2');
+    let targetHost = '';
+    let targetTest = undefined;
+    let parentSearch = '';
+    let href = '';
+
+    console.log('element click handler', element);
+    // check if the element or a parent element of it is a link
+    while (element && element.nodeName !== 'A') {
+      console.log('element.nodeName', element.nodeName);
+      element = element.parentNode;
+    }
+
+    console.log('element after while', element);
+    console.log('event', event);
+    console.log('event.srcElement', event.srcElement);
   }
+
+  /*getDigidipUrl() {
+   const ppRef = this.viewer_.getUnconfirmedReferrerUrl();
+   const currUrl = this.viewer_.getResolvedViewerUrl();
+  }*/
 }
