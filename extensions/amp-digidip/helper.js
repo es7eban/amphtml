@@ -1,5 +1,5 @@
 /**
- * Get all filtered, anchors
+ * Get all scope elements
  */
 export function getScopeElements(ampDoc, digidipOpts){
 
