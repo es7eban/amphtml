@@ -17,7 +17,7 @@
 import {LinkShifter} from './link-shifter';
 import {Services} from '../../../src/services';
 import {getDigidipOptions} from './digidip-options';
-import {getAllSuitableAnchors} from "../helper";
+import {getScopeElements} from "../helper";
 
 export class AmpDigidip extends AMP.BaseElement {
 
@@ -55,7 +55,8 @@ export class AmpDigidip extends AMP.BaseElement {
     this.docInfo_ = Services.documentInfoForDoc(this.ampDoc_);
 
     //testing
-    let list = getAllSuitableAnchors(this.ampDoc_, {clickhandler_attribute:'id', element_clickhandler:'scope'});
+    let list = getScopeElements(this.ampDoc_, {clickhandler_attribute:'class', element_clickhandler:'scope'});
+    console.log(list);
 
     return this.ampDoc_.whenBodyAvailable()
         .then(() => this.viewer_.getReferrerUrl())
