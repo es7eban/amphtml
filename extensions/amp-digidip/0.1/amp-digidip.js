@@ -87,10 +87,9 @@ export class AmpDigidip extends AMP.BaseElement {
 
     this.merchantUrl_ = 'http://amazon.de/category?pid=777';
     this.shifter_ = new LinkShifter(
-        this.digidipOpts_,
         this.merchantUrl_,
-        this.viewer_
-    );
+        this.viewer_,
+        this.ampDoc_);
 
     list.forEach(anchor => {
       anchor.addEventListener('click', event => {
