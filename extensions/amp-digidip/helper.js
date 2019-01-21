@@ -1,57 +1,61 @@
 /**
  * Get all scope elements
+ * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampDoc
+ * @param {?Object} digidipOpts
  */
-export function getScopeElements(ampDoc, digidipOpts){
+export function getScopeElements(ampDoc, digidipOpts) {
 
-    let doc = ampDoc.getRootNode();
+  const doc = ampDoc.getRootNode();
 
-    let scope ='';
+  let scope = '';
 
-    let scopeElements = null;
+  let scopeElements = null;
 
-    if (digidipOpts.clickhandler_attribute!=="" && digidipOpts.element_clickhandler!=="") {
+  if (digidipOpts.elementClickhandlerAttribute !== '' &&
+      digidipOpts.elementClickhandler !== ''
+  ) {
 
-        if (digidipOpts.clickhandler_attribute==='id') {
+    if (digidipOpts.elementClickhandlerAttribute === 'id') {
 
-            scope = '#';
+      scope = '#';
 
-            scopeElements = doc.querySelectorAll(scope + digidipOpts.element_clickhandler);
+      scopeElements = doc.querySelectorAll(
+          scope + digidipOpts.elementClickhandler);
 
-        }
-        else if (digidipOpts.clickhandler_attribute==='class') {
+    } else if (digidipOpts.elementClickhandlerAttribute === 'class') {
 
-            scope = '.';
+      scope = '.';
 
-            let classElements = doc.querySelectorAll(scope + digidipOpts.element_clickhandler);
+      let classElements = doc.querySelectorAll(
+          scope + digidipOpts.elementClickhandler);
 
-            classElements = Object.keys(classElements).map(function (key) {
+      classElements = Object.keys(classElements).map(key => {
 
-                return classElements[key];
-            });
+        return classElements[key];
+      });
 
-            if (classElements.length>0) {
+      if (classElements.length > 0) {
 
-                classElements = classElements.filter(function (item) {
+        classElements = classElements.filter(item => {
 
-                    for (let i in classElements) {
+          for (const i in classElements) {
 
-                        if (classElements[i].contains(item) && classElements[i] !== item) {
+            if (classElements[i].contains(item) && classElements[i] !== item) {
 
-                            return false;
-                        }
-                    }
-
-                    return true;
-                });
-
-                scopeElements = classElements
-
+              return false;
             }
+          }
 
-        }
+          return true;
+        });
 
-        return scopeElements
+        scopeElements = classElements;
 
+      }
     }
+
+    return scopeElements;
+
+  }
 
 }
