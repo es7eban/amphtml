@@ -55,8 +55,8 @@ export class AmpDigidip extends AMP.BaseElement {
     this.docInfo_ = Services.documentInfoForDoc(this.ampDoc_);
 
     //testing
-    let list = getScopeElements(this.ampDoc_, {clickhandler_attribute:'class', element_clickhandler:'scope'});
-    console.log(list);
+    let list = getScopeElements(this.ampDoc_, {clickhandler_attribute:'class', element_clickhandler:'scopes'});
+    console.log(typeof list);
 
     return this.ampDoc_.whenBodyAvailable()
         .then(() => this.viewer_.getReferrerUrl())

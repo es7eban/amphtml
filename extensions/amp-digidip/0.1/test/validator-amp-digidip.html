@@ -15,6 +15,22 @@
   <script async src="https://cdn.ampproject.org/v0.js"></script>
 </head>
 <body>
+  <div id="scope">
+    <a href="http://jn.pt">anchor 1</a>
+    <a rel="noreferrer pass" href="http://jn.pt">anchor 2</a>
+    <div id="notrack">
+      <a href="http://jn.pt">anchor 3</a>
+    </div>
+    <div class="scope">
+      <a href="http://jn.pt">anchor 3</a>
+    </div>
+    <div class="scope">
+      <a href="http://jn.pt">anchor 3</a>
+      <div class="scope">
+        <a href="sss"></a>
+      </div>
+    </div>
+  </div>
   <amp-digidip
           layout="responsive"
           width="150"
@@ -32,7 +48,5 @@
           element-ignore-pattern="pass"
           element-ignore-consider-parents="0">
   </amp-digidip>
-
-
 </body>
 </html>

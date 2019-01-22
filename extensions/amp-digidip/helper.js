@@ -7,7 +7,7 @@ export function getScopeElements(ampDoc, digidipOpts){
 
     let scope ='';
 
-    let scopeElements = null;
+    let scopeElements = doc;
 
     if (digidipOpts.clickhandler_attribute!=="" && digidipOpts.element_clickhandler!=="") {
 
