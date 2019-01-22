@@ -129,6 +129,12 @@ export class LinkShifter {
     return false;
   }
 
+  /**
+   * @param {} htmlElement
+   * @param {string} trimmedDomain
+   * @returns {boolean}
+   * @private
+   */
   wasShifted_(htmlElement, trimmedDomain) {
     const href = htmlElement.getAttribute('href');
 

@@ -53,7 +53,6 @@ export function getScopeElements(ampDoc, digidipOpts) {
 
       }
     }
-
   }
 
   return scopeElements;
