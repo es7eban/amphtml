@@ -27,5 +27,6 @@ export const REPLACING_ELEMENTS_EXCLUDE = [
   'SCRIPT',
   'TEXTAREA',
 ];
-
+export const CTX_ATTR_NAME = 'digidipctx';
+export const CTX_ATTR_VALUE = Date.now();
 

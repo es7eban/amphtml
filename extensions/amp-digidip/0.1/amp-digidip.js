@@ -78,11 +78,11 @@ export class AmpDigidip extends AMP.BaseElement {
     list.forEach(nodeElement => {
       nodeElement.addEventListener('click', event => {
         this.shifter_.clickHandler(event);
-      });
+      }, false);
 
       nodeElement.addEventListener('contextmenu', event => {
         this.shifter_.clickHandler(event);
-      });
+      }, false);
     });
 
   }

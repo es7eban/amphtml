@@ -15,6 +15,7 @@
  */
 
 import {getDigidipOptions} from './digidip-options';
+import {CTX_ATTR_NAME, CTX_ATTR_VALUE} from './constants';
 
 export class LinkShifter {
   /**
@@ -48,6 +49,13 @@ export class LinkShifter {
     const trimmedDomain = this.viewer_.win.document.domain
         .replace(/(www\.)?(.*)/, '$2');
 
+    this.event_.stopPropagation();
+
+    // avoid firefox to trigger the event twice
+    if ((this.event_.type !== 'contextmenu') && (this.event_.button === 2)) {
+      return;
+    }
+
     // check if the element or a parent element of it is a link in case we got
     // a element that is child of the link element that we need
     while (htmlElement && htmlElement.nodeName !== 'A') {
@@ -65,7 +73,11 @@ export class LinkShifter {
       return;
     }
 
-    if (this.wasShifted_(htmlElement, trimmedDomain)) {
+    if (this.wasShifted_(htmlElement)) {
+      return;
+    }
+
+    if (this.isInternalLink(htmlElement, trimmedDomain)) {
       return;
     }
 
@@ -77,7 +89,9 @@ export class LinkShifter {
   }
 
   /**
-   * @param {!Element} htmlElement
+   * Check if the anchor element is placed in a section that
+   * has being mark to ignore the anchors inside
+   * @param {!HTMLElement} htmlElement
    */
   checkIsIgnore_(htmlElement) {
     const isIgnore = Boolean(
@@ -106,11 +120,26 @@ export class LinkShifter {
       }
     }
 
+    if (this.digidipOpts_.elementClickhandler !== '') {
+      // Note: Normally, this should not be necessary, because during the init
+      // phase, we only subscribe to the events of the defined
+      // element_clickhandler, but we had cases where the
+      // respective element was not available at this
+      // time. So following code is only for the 1% where
+      // it doesn't work. :-(
+      const elmTmpRootNode = document.querySelectorAll(
+          '#' + this.digidipOpts_.elementClickhandler);
+      if (elmTmpRootNode && (!elmTmpRootNode.contains(htmlElement))) {
+        return false;
+      }
+    }
+
     return false;
   }
 
   /**
-   * @param {!Element} htmlElement
+   * Check if the element has set the condition to ignore
+   * @param {!HTMLElement} htmlElement
    */
   hasPassCondition_(htmlElement) {
     let attributeValue = null;
@@ -130,12 +159,25 @@ export class LinkShifter {
   }
 
   /**
-   * @param {} htmlElement
-   * @param {string} trimmedDomain
-   * @returns {boolean}
+   * Check if the anchor element was already shifted
+   * @param {!HTMLElement} htmlElement
+   * @return {boolean}
    * @private
    */
-  wasShifted_(htmlElement, trimmedDomain) {
+  wasShifted_(htmlElement) {
+    return Boolean(
+        (htmlElement.hasAttribute(CTX_ATTR_NAME)) &&
+        (htmlElement.getAttribute(CTX_ATTR_NAME) === CTX_ATTR_VALUE.toString())
+    );
+  }
+
+  /**
+   * Check if the anchor element leads to an internal link
+   * @param {!HTMLElement} htmlElement
+   * @param {?string} trimmedDomain
+   * @return {boolean}
+   */
+  isInternalLink(htmlElement, trimmedDomain) {
     const href = htmlElement.getAttribute('href');
 
     if (!(href && this.regexDomainUrl_.test(href) &&
@@ -147,6 +189,12 @@ export class LinkShifter {
     return false;
   }
 
+  /**
+   * Check if the domain of the link is in a blacklist
+   * @param {!HTMLElement} htmlElement
+   * @return {boolean}
+   * @private
+   */
   isOnBlackList_(htmlElement) {
     const href = htmlElement.getAttribute('href');
     this.regexDomainUrl_.test(href);
@@ -165,11 +213,15 @@ export class LinkShifter {
     return false;
   }
 
+  /**
+   * build the digidip tracking link
+   * @param {!HTMLElement} htmlElement
+   */
   getDigidipUrl(htmlElement) {
     const ppRef = this.viewer_.getUnconfirmedReferrerUrl();
     const currUrl = this.viewer_.getResolvedViewerUrl();
-    const {oldValHref, oldValTarget} =
-        {oldValHref: htmlElement.href, oldValTarget: htmlElement.target};
+    const oldValHref = htmlElement.href;
+    const oldValTarget = htmlElement.target;
 
     const newHref =
         this.digidipOpts_.urlVisit +
@@ -186,13 +238,29 @@ export class LinkShifter {
 
     htmlElement.href = newHref;
 
+    if (this.digidipOpts_.newTab === '1') {
+      htmlElement.target = '_blank';
+    }
+
+    // If the link has been "activated" via contextmenu,
+    // we have to keep the shifting in mind
+    if (this.event_.type === 'contextmenu') {
+      htmlElement.setAttribute(CTX_ATTR_NAME, CTX_ATTR_VALUE);
+    }
+
     this.viewer_.win.setTimeout(() => {
       htmlElement.href = oldValHref;
+
       if (oldValTarget === '') {
         htmlElement.removeAttribute('target');
       } else {
         htmlElement.target = oldValTarget;
       }
+
+      if (htmlElement.hasAttribute(CTX_ATTR_NAME)) {
+        htmlElement.removeAttribute(CTX_ATTR_NAME);
+      }
+
     }, ((this.event_.type === 'contextmenu') ? 15000 : 500));
   }
 }
