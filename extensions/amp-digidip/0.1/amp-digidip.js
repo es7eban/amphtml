@@ -55,12 +55,6 @@ export class AmpDigidip extends AMP.BaseElement {
     this.viewer_ = Services.viewerForDoc(this.ampDoc_);
     this.docInfo_ = Services.documentInfoForDoc(this.ampDoc_);
 
-    //testing
-    let list = getScopeElements(
-        this.ampDoc_,
-        {clickhandlerAttribute: 'class', elementClickhandler: 'scope'});
-    console.log(list);
-
     return this.ampDoc_.whenBodyAvailable()
         .then(() => {
           this.digidipOpts_ = getDigidipOptions(this.element);
@@ -72,25 +66,16 @@ export class AmpDigidip extends AMP.BaseElement {
    * @private
    */
   letsRockIt_() {
-    // const rootNode = this.ampDoc_.getRootNode();
-
-    /*if (this.digidipOpts_.elementClickhandler !== ''
-        && this.digidipOpts_.elementClickhandlerAttribute !== '') {
-      let tmpRootNodes = false;
-      let scope = '';
-
-      switch (this.digidipOpts_.elementClickhandlerAttribute) {
-        case 'id':
-          scope = '#';
-          tmpRootNodes = rootNode.querySelector;
-      }
-    }*/
-
     const doc = this.ampDoc_.getRootNode();
 
-    console.log(doc);
+    const list = getScopeElements(
+        this.ampDoc_,
+        this.digidipOpts_);
+    console.log('list', list); return false;
 
-    const list = doc.querySelectorAll('a');
+    console.log(doc);
+    console.log('this.viewer_', this.viewer_);
+    return;
 
     this.merchantUrl_ = 'http://amazon.de/category?pid=777';
     this.shifter_ = new LinkShifter(

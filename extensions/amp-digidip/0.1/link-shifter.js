@@ -18,66 +18,68 @@ import {getDigidipOptions} from './digidip-options';
 
 export class LinkShifter {
   /**
-   * @param {string} merchantUrl
+   * @param {!AmpElement} ampElement
    * @param {!../../../src/service/viewer-impl.Viewer} viewer
    * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampDoc
    */
-  constructor(merchantUrl, viewer, ampDoc) {
-    /** @private {?string} */
-    this.merchantUrl_ = merchantUrl;
-
+  constructor(ampElement, viewer, ampDoc) {
     /** @private {?../../../src/service/viewer-impl.Viewer} */
     this.viewer_ = viewer;
 
     /** @private {?../../../src/service/ampdoc-impl.AmpDoc} */
     this.ampDoc_ = ampDoc;
 
+    /** @private {?Event} */
+    this.event_ = null;
+
     /** @private {?Object} */
-    this.digidipOpts_ = getDigidipOptions(this.element);
+    this.digidipOpts_ = getDigidipOptions(ampElement);
+
+    /** @private {?RegExp} */
+    this.regexDomainUrl_ = /^https?:\/\/(www\.)?([^\/:]*)(:\d+)?(\/.*)?$/;
   }
 
   /**
    * @param {!Event} event
    */
   clickHandler(event) {
-    let element = event.srcElement;
-    let trimmedDomain = this.viewer_.win.document.domain
+    this.event_ = event;
+    let htmlElement = event.srcElement;
+    const trimmedDomain = this.viewer_.win.document.domain
         .replace(/(www\.)?(.*)/, '$2');
-    let targetHost = '';
-    let targetTest = undefined;
-    let parentSearch = '';
-    let href = '';
 
     // check if the element or a parent element of it is a link in case we got
     // a element that is child of the link element that we need
-    while (element && element.nodeName !== 'A') {
-      element = element.parentNode;
+    while (htmlElement && htmlElement.nodeName !== 'A') {
+      htmlElement = htmlElement.parentNode;
     }
 
     // if we could not find a valid link element, there's nothing to do
-    if (!element) {
+    if (!htmlElement) {
       return;
     }
 
     // check if there is a ignore_attribute and and ignore_pattern defined
     // and check if the current element or it's parent has it
-    if (this.checkIsIgnore_(element)) {
+    if (this.checkIsIgnore_(htmlElement)) {
       return;
     }
 
-    if (this.wasShifted_(element, trimmedDomain)) {
+    if (this.wasShifted_(htmlElement, trimmedDomain)) {
       return;
     }
 
-    if (this.isOnBlackList_) {
+    if (this.isOnBlackList_(htmlElement)) {
       return;
     }
+
+    this.getDigidipUrl(htmlElement);
   }
 
   /**
-   * @param {!Element} element
+   * @param {!Element} htmlElement
    */
-  checkIsIgnore_(element) {
+  checkIsIgnore_(htmlElement) {
     const isIgnore = Boolean(
         this.digidipOpts_.elementIgnoreAttribute !== '' &&
         this.digidipOpts_.elementIgnorePattern !== '');
@@ -88,7 +90,7 @@ export class LinkShifter {
 
     if (this.digidipOpts_.elementIgnoreConsiderParents === '1') {
       const rootNode = this.ampDoc_.getRootNode();
-      let parentSearch = element;
+      let parentSearch = htmlElement;
 
       while (parentSearch && rootNode.filters(subItem => {
         return subItem === parentSearch;
@@ -99,7 +101,7 @@ export class LinkShifter {
         parentSearch = parentSearch.parentNode;
       }
     } else {
-      if (this.hasPassCondition_(element)) {
+      if (this.hasPassCondition_(htmlElement)) {
         return true;
       }
     }
@@ -108,13 +110,13 @@ export class LinkShifter {
   }
 
   /**
-   * @param {!Element} element
+   * @param {!Element} htmlElement
    */
-  hasPassCondition_(element) {
+  hasPassCondition_(htmlElement) {
     let attributeValue = null;
 
-    if (element.hasAttribute(this.digidipOpts_.elementIgnoreAttribute)) {
-      attributeValue = element.getAttribute(
+    if (htmlElement.hasAttribute(this.digidipOpts_.elementIgnoreAttribute)) {
+      attributeValue = htmlElement.getAttribute(
           this.digidipOpts_.elementIgnoreAttribute);
 
       const searchAttr = attributeValue.search(
@@ -127,18 +129,64 @@ export class LinkShifter {
     return false;
   }
 
-  wasShifted_(element, trimmedDomain) {
-    const href = element.getAttribute('href');
+  wasShifted_(htmlElement, trimmedDomain) {
+    const href = htmlElement.getAttribute('href');
 
-    if (!(href && /^https?:\/\/(www\.)?([^\/:]*)(:\d+)?(\/.*)?$/.test(href) &&
+    if (!(href && this.regexDomainUrl_.test(href) &&
             RegExp.$2 !== trimmedDomain)
     ) {
       return true;
     }
+
+    return false;
   }
 
-  /*getDigidipUrl() {
-   const ppRef = this.viewer_.getUnconfirmedReferrerUrl();
-   const currUrl = this.viewer_.getResolvedViewerUrl();
-  }*/
+  isOnBlackList_(htmlElement) {
+    const href = htmlElement.getAttribute('href');
+    this.regexDomainUrl_.test(href);
+    const targetHost = RegExp.$2;
+
+    if (this.digidipOpts_.hostsIgnore.length > 0) {
+      const targetTest = new RegExp(
+          '(' + this.digidipOpts_.hostsIgnore
+              .join('|').replace(/[\.]/g, '\\$&') + ')$',
+          'i');
+      if (targetTest.test(targetHost)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  getDigidipUrl(htmlElement) {
+    const ppRef = this.viewer_.getUnconfirmedReferrerUrl();
+    const currUrl = this.viewer_.getResolvedViewerUrl();
+    const {oldValHref, oldValTarget} =
+        {oldValHref: htmlElement.href, oldValTarget: htmlElement.target};
+
+    const newHref =
+        this.digidipOpts_.urlVisit +
+        encodeURIComponent(htmlElement.href) +
+        (htmlElement.rev ?
+          ('&ref=' + encodeURIComponent(htmlElement.rev)) : ''
+        ) +
+        (htmlElement.getAttribute('data-ddid') ?
+          ('&wd_id=' +
+              encodeURIComponent(htmlElement.getAttribute('data-ddid'))) : ''
+        ) +
+        (ppRef ? ('&ppref=' + encodeURIComponent(ppRef)) : '') +
+        (currUrl ? ('&currurl=' + encodeURIComponent(currUrl)) : '');
+
+    htmlElement.href = newHref;
+
+    this.viewer_.win.setTimeout(() => {
+      htmlElement.href = oldValHref;
+      if (oldValTarget === '') {
+        htmlElement.removeAttribute('target');
+      } else {
+        htmlElement.target = oldValTarget;
+      }
+    }, ((this.event_.type === 'contextmenu') ? 15000 : 500));
+  }
 }
