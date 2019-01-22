@@ -1,26 +1,47 @@
 import '../amp-digidip';
+import {getScopeElements} from "../../helper";
 
 describes.realWin('amp-digidip', {
-    amp: {
-        extensions: ['amp-digidip'],
-    },
+  amp: {
+    extensions: ['amp-digidip'],
+  },
 }, env => {
 
-    let win;
-
-    beforeEach(() => {
-        win = env.win;
-
-    });
-
-    it('Shoud find 2 class section', () => {
-
-        console.log(win);
-
-        expect(2).to.equal(2);
-    });
+  let win;
+  let ampdoc;
+  let doc;
 
 
+  beforeEach(() => {
+
+    win = env.win;
+    doc = new DOMParser().parseFromString('<div id="scope"></div><div class="scope"></div><div class="scope"><div class="scope"></div></div>', 'text/html');
+
+  });
+
+  it('Shoud find html node when there are no scope options', () => {
+
+    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: '', elementClickhandler: ''});
+
+    expect(scopes[0].localName).to.equal('html');
+
+  });
+
+  it('Shoud find one scope node', () => {
+
+    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'id', elementClickhandler: 'scope'});
+
+    expect(Object.keys(scopes).length).to.equal(1);
+
+  });
+
+  it('Shoud find two scope nodes', () => {
+
+    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'class', elementClickhandler: 'scope'});
+
+    expect(Object.keys(scopes).length).to.equal(2);
+
+  });
 
 
 });
