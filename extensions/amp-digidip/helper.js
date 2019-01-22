@@ -1,8 +1,7 @@
 /**
- *
- * @param ampDoc
- * @param digidipOpts
- * @returns {*}
+ * Get all scope elements
+ * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampDoc
+ * @param {?Object} digidipOpts
  */
 export function getScopeElements(ampDoc, digidipOpts) {
 
@@ -22,7 +21,6 @@ export function getScopeElements(ampDoc, digidipOpts) {
 
       scopeElements = doc.querySelectorAll(
           scope + digidipOpts.elementClickhandler);
-
 
     } else if (digidipOpts.elementClickhandlerAttribute === 'class') {
 

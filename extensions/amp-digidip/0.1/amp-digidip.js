@@ -68,10 +68,7 @@ export class AmpDigidip extends AMP.BaseElement {
   letsRockIt_() {
     const list = getScopeElements(
         this.ampDoc_,
-        {elementClickhandlerAttribute: 'id', elementClickhandler: 'scope'});
-
-    //console.log(list[0].localName);
-    //console.log(list);
+        this.digidipOpts_);
 
     this.shifter_ = new LinkShifter(
         this.element,

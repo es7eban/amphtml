@@ -123,7 +123,7 @@ module.exports = {
 
   // Can't import the Karma constant config.LOG_ERROR, so we hard code it here.
   // Hopefully it'll never change.
-  logLevel: 'ALL',
+  logLevel: 'ERROR',
 
   autoWatch: true,
 
@@ -239,8 +239,8 @@ module.exports = {
       // Longer timeout on Travis; fail quickly at local.
       timeout: process.env.TRAVIS ? 10000 : 2000,
     },
-    captureConsole: true,
-    verboseLogging: true,
+    captureConsole: false,
+    verboseLogging: false,
   },
 
   singleRun: true,
@@ -251,13 +251,6 @@ module.exports = {
 
   // IF YOU CHANGE THIS, DEBUGGING WILL RANDOMLY KILL THE BROWSER
   browserDisconnectTolerance: process.env.TRAVIS ? 2 : 0,
-
-
-  browserConsoleLogOptions: {
-    level: 'log',
-    format: '%b %T: %m',
-    terminal: true
-  },
 
   // Import our gulp webserver as a Karma server middleware
   // So we instantly have all the custom server endpoints available
