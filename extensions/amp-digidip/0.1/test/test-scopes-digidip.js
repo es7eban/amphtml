@@ -8,7 +8,6 @@ describes.realWin('amp-digidip', {
 }, env => {
 
   let win;
-  let ampdoc;
   let doc;
 
 
@@ -21,7 +20,7 @@ describes.realWin('amp-digidip', {
 
   it('Shoud find html node when there are no scope options', () => {
 
-    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: '', elementClickhandler: ''});
+    const scopes = getScopeElements(doc, {elementClickhandlerAttribute: '', elementClickhandler: ''});
 
     expect(scopes[0].localName).to.equal('html');
 
@@ -29,7 +28,7 @@ describes.realWin('amp-digidip', {
 
   it('Shoud find one scope node', () => {
 
-    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'id', elementClickhandler: 'scope'});
+    const scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'id', elementClickhandler: 'scope'});
 
     expect(Object.keys(scopes).length).to.equal(1);
 
@@ -37,7 +36,7 @@ describes.realWin('amp-digidip', {
 
   it('Shoud find two scope nodes', () => {
 
-    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'class', elementClickhandler: 'scope'});
+    const scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'class', elementClickhandler: 'scope'});
 
     expect(Object.keys(scopes).length).to.equal(2);
 
