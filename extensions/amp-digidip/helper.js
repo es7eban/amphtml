@@ -58,7 +58,5 @@ export function getScopeElements(ampDoc, digidipOpts) {
 
   }
 
-  console.log("------->", JSON.stringify(scopeElements));
-
   return scopeElements;
 }

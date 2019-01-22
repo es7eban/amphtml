@@ -71,7 +71,7 @@ export class AmpDigidip extends AMP.BaseElement {
         {elementClickhandlerAttribute: 'id', elementClickhandler: 'scope'});
 
     //console.log(list[0].localName);
-    console.log(list);
+    //console.log(list);
 
     this.shifter_ = new LinkShifter(
         this.element,
