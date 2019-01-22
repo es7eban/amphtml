@@ -9,7 +9,7 @@ export function getScopeElements(ampDoc, digidipOpts) {
 
   let scope = '';
 
-  let scopeElements = null;
+  let scopeElements = doc;
 
   if (digidipOpts.elementClickhandlerAttribute !== '' &&
       digidipOpts.elementClickhandler !== ''
@@ -54,8 +54,8 @@ export function getScopeElements(ampDoc, digidipOpts) {
       }
     }
 
-    return scopeElements;
-
   }
+
+  return scopeElements;
 
 }
