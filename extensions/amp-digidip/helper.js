@@ -54,8 +54,8 @@ export function getScopeElements(ampDoc, digidipOpts) {
       }
     }
 
-    return scopeElements;
-
   }
+
+  return scopeElements;
 
 }
