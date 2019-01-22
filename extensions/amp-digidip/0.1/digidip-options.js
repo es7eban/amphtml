@@ -25,7 +25,7 @@ export function getDigidipOptions(element) {
     useWorddip: element.getAttribute('use-worddip'),
     newTab: element.getAttribute('new-tab'),
     encodedXhrCredentials: element.getAttribute('encoded-xhr-credentials'),
-    hostsIgnore: element.getAttribute('hosts-ignore'),
+    hostsIgnore: element.getAttribute('hosts-ignore').split('|'),
     readingWordsExclude: element.getAttribute('reading-words-exclude'),
     elementClickhandler: element.getAttribute('element-clickhandler'),
     elementClickhandlerAttribute: element.getAttribute(

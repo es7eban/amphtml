@@ -9,7 +9,7 @@ export function getScopeElements(ampDoc, digidipOpts) {
 
   let scope = '';
 
-  let scopeElements = doc;
+  let scopeElements = doc.querySelectorAll('*');
 
   if (digidipOpts.elementClickhandlerAttribute !== '' &&
       digidipOpts.elementClickhandler !== ''
@@ -57,5 +57,4 @@ export function getScopeElements(ampDoc, digidipOpts) {
   }
 
   return scopeElements;
-
 }

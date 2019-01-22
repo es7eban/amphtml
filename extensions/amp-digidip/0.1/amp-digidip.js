@@ -66,20 +66,12 @@ export class AmpDigidip extends AMP.BaseElement {
    * @private
    */
   letsRockIt_() {
-    const doc = this.ampDoc_.getRootNode();
-
     const list = getScopeElements(
         this.ampDoc_,
         this.digidipOpts_);
-    console.log('list', list); return false;
 
-    console.log(doc);
-    console.log('this.viewer_', this.viewer_);
-    return;
-
-    this.merchantUrl_ = 'http://amazon.de/category?pid=777';
     this.shifter_ = new LinkShifter(
-        this.merchantUrl_,
+        this.element,
         this.viewer_,
         this.ampDoc_);
 
