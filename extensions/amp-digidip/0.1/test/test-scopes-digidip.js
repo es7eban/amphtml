@@ -15,7 +15,7 @@ describes.realWin('amp-digidip', {
   beforeEach(() => {
 
     win = env.win;
-    doc = new DOMParser().parseFromString('<div id="scope"></div><div class="scope"></div><div class="scope"></div>', 'text/html');
+    doc = new DOMParser().parseFromString('<div id="scope"></div><div class="scope"></div><div class="scope"><div class="scope"></div></div>', 'text/html');
 
   });
 
@@ -35,11 +35,11 @@ describes.realWin('amp-digidip', {
 
   });
 
-  it('Shoud find tweo scope nodes', () => {
+  it('Shoud find two scope nodes', () => {
 
-    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'id', elementClickhandler: 'scope'});
+    let scopes = getScopeElements(doc, {elementClickhandlerAttribute: 'class', elementClickhandler: 'scope'});
 
-    expect(Object.keys(scopes).length).to.equal(1);
+    expect(Object.keys(scopes).length).to.equal(2);
 
   });
 
