@@ -15,6 +15,9 @@
  */
 
 import '../amp-digidip';
+import {LinkShifter} from '../link-shifter';
+import {Services} from '../../../../src/services';
+import {mockData} from './mockData';
 import helpersMaker from './test-helpers';
 
 describes.fakeWin('amp-digidip', {
@@ -23,9 +26,12 @@ describes.fakeWin('amp-digidip', {
   },
 }, env => {
 
-  let ampDigidip, helpers;
+  let ampDoc, viewer, ampDigidip, helpers;
 
   beforeEach(() => {
+    ampDoc = env.ampdoc;
+    viewer = Services.viewerForDoc(ampDoc);
+
     helpers = helpersMaker(env);
     ampDigidip = helpers.createAmpDigidip({
       'publisher-id': 'stylebudget',
@@ -36,18 +42,30 @@ describes.fakeWin('amp-digidip', {
     env.sandbox.restore();
   });
 
-  describe('digidipOptions', () => {
-    it('Should show an error if publisher-id is missing', () => {
-      ampDigidip = helpers.createAmpDigidip();
+  describe('URL shifting', () => {
+    it('Should generate digidip URL base on mock data', () => {
+      for (const i in mockData) {
+        const urlParams = {
+          ppRef: mockData[i].ppRef,
+          currUrl: mockData[i].currUrl,
+        };
+        const el = document.createElement('a');
+        el.setAttribute('href', mockData[i].href);
 
-      console.log(ampDigidip.publisherId);
-      allowConsoleError(() =>
-        expect(() => {
-          ampDigidip.buildCallback();
-        }).to.throw()
-      );
+        const elementDigidip = helpers.getAmpDigidipElement({
+          'publisher-id': mockData[i].publisherId,
+        });
+
+        const shifter = new LinkShifter(
+            elementDigidip,
+            viewer,
+            ampDoc
+        );
+        const digidipUrl = shifter.getDigidipUrl(el, urlParams);
+
+        expect(mockData[i].finaUrl).to.equal(digidipUrl);
+      }
     });
-
 
   });
 });
