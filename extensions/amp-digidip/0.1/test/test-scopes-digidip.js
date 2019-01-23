@@ -1,5 +1,5 @@
 import '../amp-digidip';
-import {getScopeElements} from "../../helper";
+import {getScopeElements} from "../helper";
 
 describes.realWin('amp-digidip', {
   amp: {

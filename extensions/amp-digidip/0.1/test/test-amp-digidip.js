@@ -15,24 +15,39 @@
  */
 
 import '../amp-digidip';
+import helpersMaker from './test-helpers';
 
-describes.realWin('amp-digidip', {
+describes.fakeWin('amp-digidip', {
   amp: {
     extensions: ['amp-digidip'],
   },
 }, env => {
 
-  let win;
-  let element;
+  let ampDigidip, helpers;
 
   beforeEach(() => {
-    win = env.win;
-    element = win.document.createElement('amp-digidip');
-    win.document.body.appendChild(element);
+    helpers = helpersMaker(env);
+    ampDigidip = helpers.createAmpDigidip({
+      'publisher-id': 'stylebudget',
+    });
   });
 
-  it('should have hello world when built', () => {
-    element.build();
-    expect(element.querySelector('div').textContent).to.equal('hello world');
+  afterEach(() => {
+    env.sandbox.restore();
+  });
+
+  describe('digidipOptions', () => {
+    it('Should show an error if publisher-id is missing', () => {
+      ampDigidip = helpers.createAmpDigidip();
+
+      console.log(ampDigidip.publisherId);
+      allowConsoleError(() =>
+        expect(() => {
+          ampDigidip.buildCallback();
+        }).to.throw()
+      );
+    });
+
+
   });
 });
