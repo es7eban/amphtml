@@ -17,7 +17,7 @@
 import {LinkShifter} from './link-shifter';
 import {Services} from '../../../src/services';
 import {getDigidipOptions} from './digidip-options';
-import {getScopeElements} from '../helper';
+import {getScopeElements} from './helper';
 
 export class AmpDigidip extends AMP.BaseElement {
 
