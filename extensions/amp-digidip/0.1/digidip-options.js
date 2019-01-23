@@ -16,7 +16,7 @@
 import {userAssert} from '../../../src/log';
 
 const errors = {
-  REQUIRED_URL_VISIT: 'the attribute url-visit is required',
+  REQUIRED_PUB_ID: 'the attribute publisher-id is required',
 };
 
 /**
@@ -58,8 +58,10 @@ function enforceDigipOptions(condition, message) {
  * @return {string}
  */
 function getUrlVisit(element) {
-  const urlVisit = element.getAttribute('url-visit');
-  enforceDigipOptions(urlVisit, errors.REQUIRED_URL_VISIT);
+  const publisherId = element.getAttribute('publisher-id');
+  enforceDigipOptions(publisherId, errors.REQUIRED_PUB_ID);
 
-  return urlVisit;
+  return 'http://' +
+      publisherId +
+      '.digidip.net/visit?url=';
 }
