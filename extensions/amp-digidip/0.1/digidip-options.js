@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {userAssert} from '../../../src/log';
+
+const errors = {
+  REQUIRED_URL_VISIT: 'the attribute url-visit is required',
+};
 
 /**
  * @param {!AmpElement} element
@@ -20,7 +25,7 @@
  */
 export function getDigidipOptions(element) {
   return {
-    urlVisit: element.getAttribute('url-visit'),
+    urlVisit: getUrlVisit(element),
     urlWorddipWords: element.getAttribute('url-worddip-words'),
     useWorddip: element.getAttribute('use-worddip'),
     newTab: element.getAttribute('new-tab'),
@@ -35,4 +40,26 @@ export function getDigidipOptions(element) {
     elementIgnoreConsiderParents: element.getAttribute(
         'element-ignore-consider-parents'),
   };
+}
+
+/**
+ * @param {*} condition
+ * @param {string} message
+ */
+function enforceDigipOptions(condition, message) {
+  userAssert(
+      condition,
+      `<amp-digidip> something is wrong with option: ${message}`
+  );
+}
+
+/**
+ * @param {!Element} element
+ * @return {string}
+ */
+function getUrlVisit(element) {
+  const urlVisit = element.getAttribute('url-visit');
+  enforceDigipOptions(urlVisit, errors.REQUIRED_URL_VISIT);
+
+  return urlVisit;
 }
