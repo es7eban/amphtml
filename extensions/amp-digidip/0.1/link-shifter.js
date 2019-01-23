@@ -85,7 +85,7 @@ export class LinkShifter {
       return;
     }
 
-    this.getDigidipUrl(htmlElement);
+    this.setDigidipUrl_(htmlElement);
   }
 
   /**
@@ -214,29 +214,18 @@ export class LinkShifter {
   }
 
   /**
-   * build the digidip tracking link
+   * set the digidip tracking link
    * @param {!HTMLElement} htmlElement
    */
-  getDigidipUrl(htmlElement) {
-    const ppRef = this.viewer_.getUnconfirmedReferrerUrl();
-    const currUrl = this.viewer_.getResolvedViewerUrl();
+  setDigidipUrl_(htmlElement) {
+    const urlParams = {
+      ppRef: this.viewer_.getUnconfirmedReferrerUrl(),
+      currUrl: this.viewer_.getResolvedViewerUrl(),
+    };
     const oldValHref = htmlElement.href;
     const oldValTarget = htmlElement.target;
 
-    const newHref =
-        this.digidipOpts_.urlVisit +
-        encodeURIComponent(htmlElement.href) +
-        (htmlElement.rev ?
-          ('&ref=' + encodeURIComponent(htmlElement.rev)) : ''
-        ) +
-        (htmlElement.getAttribute('data-ddid') ?
-          ('&wd_id=' +
-              encodeURIComponent(htmlElement.getAttribute('data-ddid'))) : ''
-        ) +
-        (ppRef ? ('&ppref=' + encodeURIComponent(ppRef)) : '') +
-        (currUrl ? ('&currurl=' + encodeURIComponent(currUrl)) : '');
-
-    htmlElement.href = newHref;
+    htmlElement.href = this.getDigidipUrl(htmlElement, urlParams);
 
     if (this.digidipOpts_.newTab === '1') {
       htmlElement.target = '_blank';
@@ -262,5 +251,28 @@ export class LinkShifter {
       }
 
     }, ((this.event_.type === 'contextmenu') ? 15000 : 500));
+  }
+
+  /**
+   * @param {!HTMLElement} htmlElement
+   * @param {!Object} urlParams
+   * @return {string}
+   */
+  getDigidipUrl(htmlElement, urlParams) {
+    return this.digidipOpts_.urlVisit +
+        encodeURIComponent(htmlElement.href) +
+        (htmlElement.rev ?
+          ('&ref=' + encodeURIComponent(htmlElement.rev)) : ''
+        ) +
+        (htmlElement.getAttribute('data-ddid') ?
+          ('&wd_id=' +
+                encodeURIComponent(htmlElement.getAttribute('data-ddid'))) : ''
+        ) +
+        (urlParams.ppRef ?
+          ('&ppref=' + encodeURIComponent(urlParams.ppRef)) : ''
+        ) +
+        (urlParams.currUrl ?
+          ('&currurl=' + encodeURIComponent(urlParams.currUrl)) : ''
+        );
   }
 }
