@@ -278,7 +278,6 @@ export class LinkShifter {
         );
   }
 
-
   /**
    * @return {string}
    * @private
