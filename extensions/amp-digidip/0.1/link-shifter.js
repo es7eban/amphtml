@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {getDigidipOptions} from './digidip-options';
 import {CTX_ATTR_NAME, CTX_ATTR_VALUE} from './constants';
+import {getDigidipOptions} from './digidip-options';
 
 export class LinkShifter {
   /**
@@ -127,8 +127,8 @@ export class LinkShifter {
       // respective element was not available at this
       // time. So following code is only for the 1% where
       // it doesn't work. :-(
-      const elmTmpRootNode = document.querySelectorAll(
-          '#' + this.digidipOpts_.elementClickhandler);
+      const selector = '#' + this.digidipOpts_.elementClickhandler;
+      const elmTmpRootNode = document.querySelectorAll(selector);
       if (elmTmpRootNode && (!elmTmpRootNode.contains(htmlElement))) {
         return false;
       }
@@ -221,8 +221,8 @@ export class LinkShifter {
       ppRef: this.viewer_.getUnconfirmedReferrerUrl(),
       currUrl: this.viewer_.getResolvedViewerUrl(),
     };
-    const oldValHref = htmlElement.href;
-    const oldValTarget = htmlElement.target;
+    const oldValHref = htmlElement['href'];
+    const oldValTarget = htmlElement['target'];
 
     htmlElement.href = this.getDigidipUrl(htmlElement, urlParams);
 
