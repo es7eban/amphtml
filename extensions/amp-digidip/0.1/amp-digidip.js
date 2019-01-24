@@ -44,9 +44,10 @@ export class AmpDigidip extends AMP.BaseElement {
     this.ampDoc_ = this.getAmpDoc();
     this.viewer_ = Services.viewerForDoc(this.ampDoc_);
 
+    this.digidipOpts_ = getDigidipOptions(this.element);
+
     return this.ampDoc_.whenBodyAvailable()
         .then(() => {
-          this.digidipOpts_ = getDigidipOptions(this.element);
           this.letsRockIt_();
         });
   }
