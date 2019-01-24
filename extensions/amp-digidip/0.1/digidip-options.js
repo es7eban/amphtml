@@ -16,7 +16,7 @@
 import {userAssert} from '../../../src/log';
 
 const errors = {
-  REQUIRED_PUB_ID: 'the attribute publisher-id is required',
+  REQUIRED_PUB_ID: 'attribute publisher-id is required',
 };
 
 /**
@@ -30,7 +30,7 @@ export function getDigidipOptions(element) {
     useWorddip: element.getAttribute('use-worddip'),
     newTab: element.getAttribute('new-tab'),
     encodedXhrCredentials: element.getAttribute('encoded-xhr-credentials'),
-    hostsIgnore: element.getAttribute('hosts-ignore').split('|'),
+    hostsIgnore: element.getAttribute('hosts-ignore'),
     readingWordsExclude: element.getAttribute('reading-words-exclude'),
     elementClickhandler: element.getAttribute('element-clickhandler'),
     elementClickhandlerAttribute: element.getAttribute(

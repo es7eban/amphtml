@@ -21,7 +21,9 @@ const helpersMaker = env => {
   return {
     createAmpDigidip(extAttrs) {
       const element = this.getAmpDigidipElement(extAttrs);
+      console.log('element before getAmpDoc', element);
       element.getAmpDoc = () => env.ampdoc;
+      console.log('element after getAmpDoc', element);
 
       return new AmpDigidip(element);
     },
