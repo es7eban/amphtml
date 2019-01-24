@@ -31,10 +31,11 @@ describes.fakeWin('amp-digidip', {
     viewer = Services.viewerForDoc(ampDoc);
 
     digidipOpts = {
-      'hosts-ignore': 'facebook.com|youtube.com|baidu.com|wikipedia.org',
+      'publisher-id': 'mysuperblog',
     };
 
     helpers = helpersMaker(env);
+    ampDigidip = helpers.createAmpDigidip(digidipOpts);
   });
 
   afterEach(() => {
@@ -63,6 +64,20 @@ describes.fakeWin('amp-digidip', {
       expect(() => {
         ampDigidip.buildCallback();
       }).to.not.throw();
+    });
+  });
+
+  describe('At loading amp-digidip extension', () => {
+    it('should call method letsRockIt on buildCallback', () => {
+      env.sandbox
+          .stub(DocumentReady, 'whenDocumentReady')
+          .returns(Promise.resolve());
+
+      env.sandbox.stub(ampDigidip, 'letsRockIt_');
+
+      return ampDigidip.buildCallback().then(() => {
+        expect(ampDigidip.letsRockIt_.calledOnce).to.be.true;
+      });
     });
   });
 });
