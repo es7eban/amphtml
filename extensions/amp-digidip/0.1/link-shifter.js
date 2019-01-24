@@ -218,7 +218,7 @@ export class LinkShifter {
    */
   setDigidipUrl_(htmlElement) {
     const urlParams = {
-      ppRef: this.viewer_.getUnconfirmedReferrerUrl(),
+      ppRef: this.viewer_.getReferrerUrl(),
       currUrl: this.viewer_.getResolvedViewerUrl(),
     };
     const oldValHref = htmlElement['href'];
