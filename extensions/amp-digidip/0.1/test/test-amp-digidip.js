@@ -24,11 +24,10 @@ describes.fakeWin('amp-digidip', {
   },
 }, env => {
 
-  let ampDigidip, ampDoc, viewer, digidipOpts, helpers;
+  let ampDigidip, ampDoc, digidipOpts, helpers;
 
   beforeEach(() => {
     ampDoc = env.ampdoc;
-    viewer = Services.viewerForDoc(ampDoc);
 
     digidipOpts = {
       'publisher-id': 'mysuperblog',
