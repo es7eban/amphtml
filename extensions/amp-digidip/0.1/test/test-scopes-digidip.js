@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-
-
 import '../amp-digidip';
 import {getScopeElements} from "../helper";
-
 
 describes.realWin('amp-digidip', {
   amp: {
