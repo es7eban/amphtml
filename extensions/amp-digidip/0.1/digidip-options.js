@@ -59,6 +59,7 @@ function enforceDigipOptions(condition, message) {
  */
 function getUrlVisit(element) {
   const publisherId = element.getAttribute('publisher-id');
+
   enforceDigipOptions(publisherId, errors.REQUIRED_PUB_ID);
 
   return 'http://' +

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import '../amp-digidip';
+import * as DocumentReady from '../../../../src/document-ready';
 import {Services} from '../../../../src/services';
 import helpersMaker from './test-helpers';
 
@@ -24,7 +24,7 @@ describes.fakeWin('amp-digidip', {
   },
 }, env => {
 
-  let ampDigidip, ampDoc, viewer, helpers;
+  let ampDigidip, ampDoc, viewer, digidipOpts, helpers;
 
   beforeEach(() => {
     ampDoc = env.ampdoc;
@@ -50,6 +50,19 @@ describes.fakeWin('amp-digidip', {
           ampDigidip.buildCallback();
         }).to.throw()
       );
+    });
+
+    it('Should not show any error when specifying attr publisher-id', () => {
+      ampDigidip = helpers.createAmpDigidip({
+        'publisher-id': 'mysuperblog',
+      });
+      env.sandbox
+          .stub(DocumentReady, 'whenDocumentReady')
+          .returns(Promise.reject());
+
+      expect(() => {
+        ampDigidip.buildCallback();
+      }).to.not.throw();
     });
   });
 });
