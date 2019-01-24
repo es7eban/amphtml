@@ -25,23 +25,14 @@ export class AmpDigidip extends AMP.BaseElement {
   constructor(element) {
     super(element);
 
-    /** @private {?../../../src/service/xhr-impl.Xhr} */
-    this.xhr_ = null;
-
     /** @private {?../../../src/service/ampdoc-impl.AmpDoc} */
     this.ampDoc_ = null;
 
     /** @private {?../../../src/service/viewer-impl.Viewer} */
     this.viewer_ = null;
 
-    /** @private {?../../../src/service/document-info-impl.DocumentInfoDef} */
-    this.docInfo_ = null;
-
     /* @private {?./link-shifter} */
     this.shifter_ = null;
-
-    /** @private {?string} */
-    this.merchantUrl_ = '';
 
     /** @private {?Object} */
     this.digidipOpts_ = {};
@@ -50,14 +41,13 @@ export class AmpDigidip extends AMP.BaseElement {
 
   /** @override */
   buildCallback() {
-    this.xhr_ = Services.xhrFor(this.win);
     this.ampDoc_ = this.getAmpDoc();
     this.viewer_ = Services.viewerForDoc(this.ampDoc_);
-    this.docInfo_ = Services.documentInfoForDoc(this.ampDoc_);
+
+    this.digidipOpts_ = getDigidipOptions(this.element);
 
     return this.ampDoc_.whenBodyAvailable()
         .then(() => {
-          this.digidipOpts_ = getDigidipOptions(this.element);
           this.letsRockIt_();
         });
   }
