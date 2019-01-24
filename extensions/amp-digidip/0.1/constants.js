@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-export const REPLACING_ELEMENTS_EXCLUDE = [
-  'A',
-  'H1',
-  'H2',
-  'H3',
-  'PRE',
-  'CODE',
-  'STYLE',
-  'TITLE',
-  'IFRAME',
-  'SCRIPT',
-  'TEXTAREA',
-];
 export const CTX_ATTR_NAME = 'digidipctx';
-export const CTX_ATTR_VALUE = Date.now();
+export const CTX_ATTR_VALUE = () => {
+  return Date.now();
+};
 
