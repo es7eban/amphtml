@@ -261,7 +261,7 @@ export class LinkShifter {
    * @return {string}
    */
   getDigidipUrl(htmlElement, urlParams) {
-    return this.digidipOpts_.this.getUrlVisit_ +
+    return this.getUrlVisit_() +
         encodeURIComponent(htmlElement.href) +
         (htmlElement.rev ?
           ('&ref=' + encodeURIComponent(htmlElement.rev)) : ''
