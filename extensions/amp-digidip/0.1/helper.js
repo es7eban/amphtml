@@ -16,10 +16,10 @@
 
 
 /**
- * Get all scope elements
- * @param ampDoc
- * @param digidipOpts
- * @returns {*}
+ *
+ * @param {AmpDoc} ampDoc
+ * @param {Object}  digidipOpts
+ * @return {*}
  */
 export function getScopeElements(ampDoc, digidipOpts) {
 
@@ -35,17 +35,15 @@ export function getScopeElements(ampDoc, digidipOpts) {
 
     if (digidipOpts.elementClickhandlerAttribute === 'id') {
 
-      scope = '#';
+      scope = '#' + digidipOpts.elementClickhandler;
 
-      scopeElements = doc.querySelectorAll(
-          scope + digidipOpts.elementClickhandler);
+      scopeElements = doc.querySelectorAll(scope);
 
     } else if (digidipOpts.elementClickhandlerAttribute === 'class') {
 
-      scope = '.';
+      scope = '.' + digidipOpts.elementClickhandler;
 
-      let classElements = doc.querySelectorAll(
-          scope + digidipOpts.elementClickhandler);
+      let classElements = doc.querySelectorAll(scope);
 
       classElements = Object.keys(classElements).map(key => {
 
