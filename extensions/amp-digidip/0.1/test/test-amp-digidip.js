@@ -15,7 +15,6 @@
  */
 
 import * as DocumentReady from '../../../../src/document-ready';
-import {Services} from '../../../../src/services';
 import helpersMaker from './test-helpers';
 
 describes.fakeWin('amp-digidip', {
@@ -24,11 +23,9 @@ describes.fakeWin('amp-digidip', {
   },
 }, env => {
 
-  let ampDigidip, ampDoc, digidipOpts, helpers;
+  let ampDigidip, digidipOpts, helpers;
 
   beforeEach(() => {
-    ampDoc = env.ampdoc;
-
     digidipOpts = {
       'publisher-id': 'mysuperblog',
     };
@@ -76,6 +73,34 @@ describes.fakeWin('amp-digidip', {
 
       return ampDigidip.buildCallback().then(() => {
         expect(ampDigidip.letsRockIt_.calledOnce).to.be.true;
+      });
+    });
+
+    it('Should read and set options', () => {
+      env.sandbox
+          .stub(DocumentReady, 'whenDocumentReady')
+          .returns(Promise.resolve());
+      env.sandbox.spy(digidipOpts, 'getDigidipOptions');
+
+      const opts = {
+        'publisher-id': 'mysuperblog',
+        'new-tab': '1',
+        'hosts-ignore': 'facebook.com|youtube.com|baidu.com|wikipedia.org',
+        'reading-words-exclude': 'the|you|was|or|it|and|to|of|in|for|on|with',
+        'element-clickhandler': '',
+        'element-clickhandler-attribute': '',
+        'element-ignore-attribute': '',
+        'element-ignore-pattern': '',
+        'element-ignore-consider-parents': '0',
+      };
+
+      ampDigidip = helpers.createAmpDigidip(opts);
+      env.sandbox.stub(ampDigidip, 'letsRockIt_');
+
+      return ampDigidip.buildCallback().then(() => {
+        expect(digidipOpts.getDigidipOptions.calledOnce).to.be.true;
+        expect(ampDigidip.digidipOpts_).to.deep.include({
+        });
       });
     });
   });
