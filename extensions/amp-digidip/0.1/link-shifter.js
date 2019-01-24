@@ -261,7 +261,7 @@ export class LinkShifter {
    * @return {string}
    */
   getDigidipUrl(htmlElement, urlParams) {
-    return this.digidipOpts_.urlVisit +
+    return this.digidipOpts_.this.getUrlVisit_ +
         encodeURIComponent(htmlElement.href) +
         (htmlElement.rev ?
           ('&ref=' + encodeURIComponent(htmlElement.rev)) : ''
@@ -276,5 +276,15 @@ export class LinkShifter {
         (urlParams.currUrl ?
           ('&currurl=' + encodeURIComponent(urlParams.currUrl)) : ''
         );
+  }
+
+
+  /**
+   * @return {string}
+   * @private
+   */
+  getUrlVisit_() {
+    return 'http://' + this.digidipOpts_.publisherId +
+        '.digidip.net/visit?url=';
   }
 }

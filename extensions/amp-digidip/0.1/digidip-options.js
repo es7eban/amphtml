@@ -25,7 +25,7 @@ const errors = {
  */
 export function getDigidipOptions(element) {
   return {
-    urlVisit: getUrlVisit(element),
+    publisherId: getPublisherId(element),
     urlWorddipWords: element.getAttribute('url-worddip-words'),
     useWorddip: element.getAttribute('use-worddip'),
     newTab: element.getAttribute('new-tab'),
@@ -57,12 +57,11 @@ function enforceDigipOptions(condition, message) {
  * @param {!Element} element
  * @return {string}
  */
-function getUrlVisit(element) {
+function getPublisherId(element) {
   const publisherId = element.getAttribute('publisher-id');
 
   enforceDigipOptions(publisherId, errors.REQUIRED_PUB_ID);
 
-  return 'http://' +
-      publisherId +
-      '.digidip.net/visit?url=';
+  return publisherId;
 }
+
