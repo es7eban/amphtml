@@ -217,39 +217,42 @@ export class LinkShifter {
    * @param {!HTMLElement} htmlElement
    */
   setDigidipUrl_(htmlElement) {
-    const urlParams = {
-      ppRef: this.viewer_.getReferrerUrl(),
-      currUrl: this.viewer_.getResolvedViewerUrl(),
-    };
     const oldValHref = htmlElement['href'];
     const oldValTarget = htmlElement['target'];
 
-    htmlElement.href = this.getDigidipUrl(htmlElement, urlParams);
+    this.viewer_.getReferrerUrl().then(referrerUrl => {
+      const urlParams = {
+        ppRef: referrerUrl,
+        currUrl: this.viewer_.getResolvedViewerUrl(),
+      };
 
-    if (this.digidipOpts_.newTab === '1') {
-      htmlElement.target = '_blank';
-    }
+      htmlElement.href = this.getDigidipUrl(htmlElement, urlParams);
 
-    // If the link has been "activated" via contextmenu,
-    // we have to keep the shifting in mind
-    if (this.event_.type === 'contextmenu') {
-      htmlElement.setAttribute(CTX_ATTR_NAME, CTX_ATTR_VALUE);
-    }
-
-    this.viewer_.win.setTimeout(() => {
-      htmlElement.href = oldValHref;
-
-      if (oldValTarget === '') {
-        htmlElement.removeAttribute('target');
-      } else {
-        htmlElement.target = oldValTarget;
+      if (this.digidipOpts_.newTab === '1') {
+        htmlElement.target = '_blank';
       }
 
-      if (htmlElement.hasAttribute(CTX_ATTR_NAME)) {
-        htmlElement.removeAttribute(CTX_ATTR_NAME);
+      // If the link has been "activated" via contextmenu,
+      // we have to keep the shifting in mind
+      if (this.event_.type === 'contextmenu') {
+        htmlElement.setAttribute(CTX_ATTR_NAME, CTX_ATTR_VALUE);
       }
 
-    }, ((this.event_.type === 'contextmenu') ? 15000 : 500));
+      this.viewer_.win.setTimeout(() => {
+        htmlElement.href = oldValHref;
+
+        if (oldValTarget === '') {
+          htmlElement.removeAttribute('target');
+        } else {
+          htmlElement.target = oldValTarget;
+        }
+
+        if (htmlElement.hasAttribute(CTX_ATTR_NAME)) {
+          htmlElement.removeAttribute(CTX_ATTR_NAME);
+        }
+
+      }, ((this.event_.type === 'contextmenu') ? 15000 : 500));
+    });
   }
 
   /**
