@@ -17,7 +17,6 @@
 import {AmpDigidip} from '../amp-digidip';
 
 const helpersMaker = env => {
-  const {win} = env;
 
   return {
     createAmpDigidip(extAttrs) {
