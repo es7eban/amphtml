@@ -165,10 +165,10 @@ export class LinkShifter {
    * @private
    */
   wasShifted_(htmlElement) {
-    return Boolean(
-        (htmlElement.hasAttribute(CTX_ATTR_NAME)) &&
-        (htmlElement.getAttribute(CTX_ATTR_NAME) === CTX_ATTR_VALUE.toString())
-    );
+    const ctxAttrValue = CTX_ATTR_VALUE().toString();
+
+    return (htmlElement.hasAttribute(CTX_ATTR_NAME)) &&
+        (htmlElement.getAttribute(CTX_ATTR_NAME) === ctxAttrValue);
   }
 
   /**
@@ -235,7 +235,7 @@ export class LinkShifter {
       // If the link has been "activated" via contextmenu,
       // we have to keep the shifting in mind
       if (this.event_.type === 'contextmenu') {
-        htmlElement.setAttribute(CTX_ATTR_NAME, CTX_ATTR_VALUE);
+        htmlElement.setAttribute(CTX_ATTR_NAME, CTX_ATTR_VALUE());
       }
 
       this.viewer_.win.setTimeout(() => {
