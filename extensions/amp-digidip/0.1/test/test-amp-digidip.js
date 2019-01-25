@@ -15,6 +15,7 @@
  */
 
 import * as DocumentReady from '../../../../src/document-ready';
+import * as digidipOptionsModule from '../digidip-options';
 import helpersMaker from './test-helpers';
 
 describes.fakeWin('amp-digidip', {
@@ -80,7 +81,7 @@ describes.fakeWin('amp-digidip', {
       env.sandbox
           .stub(DocumentReady, 'whenDocumentReady')
           .returns(Promise.resolve());
-      env.sandbox.spy(digidipOpts, 'getDigidipOptions');
+      env.sandbox.spy(digidipOptionsModule, 'getDigidipOptions');
 
       const opts = {
         'publisher-id': 'mysuperblog',
@@ -98,9 +99,20 @@ describes.fakeWin('amp-digidip', {
       env.sandbox.stub(ampDigidip, 'letsRockIt_');
 
       return ampDigidip.buildCallback().then(() => {
-        expect(digidipOpts.getDigidipOptions.calledOnce).to.be.true;
+        expect(digidipOptionsModule.getDigidipOptions.calledOnce).to.be.true;
         expect(ampDigidip.digidipOpts_).to.deep.include({
+          publisherId: opts['publisher-id'],
+          newTab: opts['new-tab'],
+          hostsIgnore: opts['hosts-ignore'],
+          readingWordsExclude: opts['reading-words-exclude'],
+          elementClickhandler: opts['element-clickhandler'],
+          elementClickhandlerAttribute: opts['element-clickhandler-attribute'],
+          elementIgnoreAttribute: opts['element-ignore-attribute'],
+          elementIgnorePattern: opts['element-ignore-pattern'],
+          elementIgnoreConsiderParents: opts['element-ignore-consider-parents'],
         });
+        expect(ampDigidip.digidipOpts_.hostsIgnore.split('|')).to.include
+            .members(['facebook.com']);
       });
     });
   });
