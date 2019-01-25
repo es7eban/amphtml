@@ -17,8 +17,8 @@
 
 /**
  *
- * @param {AmpDoc} ampDoc
- * @param {Object}  digidipOpts
+ * @param {?../../../src/service/ampdoc-impl.AmpDoc} ampDoc
+ * @param {!Object}  digidipOpts
  * @return {*}
  */
 export function getScopeElements(ampDoc, digidipOpts) {

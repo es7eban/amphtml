@@ -20,8 +20,8 @@ import {getDigidipOptions} from './digidip-options';
 export class LinkShifter {
   /**
    * @param {!AmpElement} ampElement
-   * @param {!../../../src/service/viewer-impl.Viewer} viewer
-   * @param {!../../../src/service/ampdoc-impl.AmpDoc} ampDoc
+   * @param {?../../../src/service/viewer-impl.Viewer} viewer
+   * @param {?../../../src/service/ampdoc-impl.AmpDoc} ampDoc
    */
   constructor(ampElement, viewer, ampDoc) {
     /** @private {?../../../src/service/viewer-impl.Viewer} */
@@ -91,7 +91,7 @@ export class LinkShifter {
   /**
    * Check if the anchor element is placed in a section that
    * has being mark to ignore the anchors inside
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    */
   checkIsIgnore_(htmlElement) {
     const isIgnore = Boolean(
@@ -103,12 +103,12 @@ export class LinkShifter {
     }
 
     if (this.digidipOpts_.elementIgnoreConsiderParents === '1') {
-      const rootNode = this.ampDoc_.getRootNode();
+      const rootNode = htmlElement.getRootNode();
       let parentSearch = htmlElement;
 
-      while (parentSearch && rootNode.filters(subItem => {
+      while (parentSearch && [rootNode].filter(subItem => {
         return subItem === parentSearch;
-      })) {
+      }).length === 0 && parentSearch !== document) {
         if (this.hasPassCondition_(parentSearch)) {
           return true;
         }
@@ -128,9 +128,11 @@ export class LinkShifter {
       // time. So following code is only for the 1% where
       // it doesn't work. :-(
       const selector = '#' + this.digidipOpts_.elementClickhandler;
-      const elmTmpRootNode = document.querySelectorAll(selector);
-      if (elmTmpRootNode && (!elmTmpRootNode.contains(htmlElement))) {
-        return false;
+      const elmTmpRootNode = htmlElement.getRootNode()
+          .querySelectorAll(selector);
+
+      if (elmTmpRootNode && this.containsNode_(elmTmpRootNode, htmlElement)) {
+        return true;
       }
     }
 
@@ -138,8 +140,25 @@ export class LinkShifter {
   }
 
   /**
+   * @param {!Object} NodeList
+   * @param {!Node} node
+   * @return {boolean}
+   * @private
+   */
+  containsNode_(NodeList, node) {
+    let result = false;
+
+    Object.keys(NodeList).forEach(key => {
+      if (NodeList[key].contains(node)) {
+        result = true;
+      }
+    });
+    return result;
+  }
+
+  /**
    * Check if the element has set the condition to ignore
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    */
   hasPassCondition_(htmlElement) {
     let attributeValue = null;
@@ -160,7 +179,7 @@ export class LinkShifter {
 
   /**
    * Check if the anchor element was already shifted
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    * @return {boolean}
    * @private
    */
@@ -173,7 +192,7 @@ export class LinkShifter {
 
   /**
    * Check if the anchor element leads to an internal link
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    * @param {?string} trimmedDomain
    * @return {boolean}
    */
@@ -191,7 +210,7 @@ export class LinkShifter {
 
   /**
    * Check if the domain of the link is in a blacklist
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    * @return {boolean}
    * @private
    */
@@ -214,7 +233,7 @@ export class LinkShifter {
 
   /**
    * set the digidip tracking link
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    */
   setDigidipUrl_(htmlElement) {
     const oldValHref = htmlElement['href'];
@@ -256,7 +275,7 @@ export class LinkShifter {
   }
 
   /**
-   * @param {!HTMLElement} htmlElement
+   * @param {!Node} htmlElement
    * @param {!Object} urlParams
    * @return {string}
    */
